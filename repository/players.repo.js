@@ -5,8 +5,8 @@ const players = blackjackDB.collection("players");
 
 export function createPlayersRepo(collection) {
     async function createPlayer(player) {
-        const { insertedId } = await collection.insertOne(player);
-        return insertedId.toString();
+        const newPlayer = await collection.insertOne(player);
+        return newPlayer.insertedId.toString();
     }
 
     async function updateChips(playerId, bet) {
