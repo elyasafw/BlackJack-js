@@ -1,7 +1,7 @@
 import playersRepo from "../repository/players.repo.js";
 import roundsRepo from "../repository/rounds.repo.js";
 import roundsService from "../services/rounds.service.js";
-import { validateNewRound } from "../utils.js";
+import { validateNewRound } from "../src/utils.js";
 
 export async function createNewPlayer(_req, res) {
     const STARTING_CHIPS = 1000;
@@ -38,7 +38,7 @@ export async function createNewRound(req, res) {
     return {
         roundId: newRoundId,
         playerCards: newData.playerCards,
-        dealerCards: newData.dealerCards[1],
+        dealerCards: [newData.dealerCards[1]],
         chips: currentChips,
     };
 }

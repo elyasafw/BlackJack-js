@@ -17,7 +17,7 @@ function createRoundService(repository) {
             "K",
             "A",
         ];
-        const SUITS = ["לב", "יהלום", "עלה", "תלתן"];
+        const SUITS = ["Heart", "Diamond", "Club", "Spade"];
         return {
             rank: RANKS[Math.floor(Math.random() * RANKS.length)],
             suit: SUITS[Math.floor(Math.random() * SUITS.length)],

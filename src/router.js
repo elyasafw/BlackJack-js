@@ -1,12 +1,12 @@
 import express from "express";
-import { createNewPlayer, createNewRound } from "./controllers/controller.js";
+import { createNewPlayer, createNewRound } from "../controllers/controller.js";
 import { addPlayerToRequest } from "./middlewares.js";
 
 export const router = express.Router();
 
 router.get("/", async (req, res) => {
     try {
-        const path = process.cwd() + "/index.html";
+        const path = process.cwd() + "/public/index.html";
         res.sendFile(path);
     } catch (error) {
         return es
@@ -27,13 +27,8 @@ router.post("/start-game", async (req, res) => {
 });
 
 router.post("/start-round", addPlayerToRequest, async (req, res) => {
-    try {
-        const newRound = await createNewRound(req, res);
-        res.status(201).send(newRound);
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send(error);
-    }
+    const newRound = await createNewRound(req, res);
+    res.status(201).send(newRound);
 });
 
 router.post("/hit", async (req, res) => {});

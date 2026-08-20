@@ -1,0 +1,68 @@
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+#getBet {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    align-items: center;
+    border: 1px solid black;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid black;
+    width: 80%;
+    align-items: center;
+}
+
+#prosessGame {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+#currentBet {
+    border: 1px solid black;
+    padding: 8px;
+    width: 120px;
+    text-align: center;
+}
+
+#table {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    border: 1px solid black;
+    padding: 8px;
+}
+
+#playerCards, #dealerCards {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    border: 1px solid black;
+    padding: 8px;
+    justify-items: center;
+}
+
+#playerName {
+    padding: 6px;
+    grid-column: 1 / -1;
+    border-bottom: 0.5px solid black;
+}
+
+.card {
+    height: 120px;
+    margin: 6px;
+}
+

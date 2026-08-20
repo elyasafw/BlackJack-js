@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./style.css" />
+        <script src="/script.js" type="module" defer></script>
+        <title>BlackJack Game</title>
+    </head>
+    <body>
+        <header id="headerGame">
+            <h1 id="gameTitle">BlackJack Game</h1>
+        </header>
+        <main id="main">
+            <section id="startDisplay">
+                <h2 id="wellcome">"ברוך הבא למשחק BlackJack"</h2>
+                <form id="getBet" class="getBet">
+                    <label for="bet">הזן סכום הימור להתחלת המשחק</label>
+                    <input
+                        type="number"
+                        id="inputBet"
+                        min="1"
+                        required
+                        placeholder="סכום ההימור"
+                    />
+                    <button id="sendBet" type="submit">התחל משחק</button>
+                    <p id="msg"></p>
+                </form>
+            </section>
+            <section id="prosessGame">
+                    <div id="currentBet">
+                        <h3 id="title">סכום הימור</h3>
+                        <h4 id="sumBet">0</h4>
+                    </div>
+                <div id="gameBtns">
+                    <button id="hitBtn">משוך</button>
+                    <button id="standBtn">עמוד</button>
+                </div>
+                <article id="table">
+                    <div id="playerCards" class="cards">
+                        <h3 id="playerName">שחקן (אתה)</h3>
+                    </div>
+                    <div id="dealerCards" class="cards">
+                        <h3 id="playerName">דילר</h3>
+                    </div>
+                </article>
+            </section>
+        </main>
+    </body>
+</html>

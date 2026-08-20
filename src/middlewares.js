@@ -1,4 +1,4 @@
-import playersRepo from "./repository/players.repo.js";
+import playersRepo from "../repository/players.repo.js";
 
 export async function addPlayerToRequest(req, res, next) {
     const playerId = req.headers["x-player-id"];
