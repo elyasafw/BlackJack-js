@@ -1,5 +1,6 @@
 import express from "express";
-import { createNewPlayer } from "./controllers/controller.js";
+import { createNewPlayer, createNewRound } from "./controllers/controller.js";
+import { addPlayerToRequest } from "./middlewares.js";
 
 export const router = express.Router();
 
@@ -8,7 +9,9 @@ router.get("/", async (req, res) => {
         const path = process.cwd() + "/index.html";
         res.sendFile(path);
     } catch (error) {
-        res.status(500).json({ error: `internal server error: ${error}` });
+        return es
+            .status(500)
+            .json({ error: `internal server error: ${error}` });
     }
 });
 
@@ -19,7 +22,17 @@ router.post("/start-game", async (req, res) => {
         const newPlayerId = await createNewPlayer(req, res);
         res.status(201).send(newPlayerId);
     } catch (error) {
-        res.status(500).send(error);
+        return res.status(500).send(error);
+    }
+});
+
+router.post("/start-round", addPlayerToRequest, async (req, res) => {
+    try {
+        const newRound = await createNewRound(req, res);
+        res.status(201).send(newRound);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send(error);
     }
 });
 

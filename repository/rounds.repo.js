@@ -35,7 +35,7 @@ export function createRoundsRepo(collection) {
 
     async function findRoundByPlayer(playerId) {
         const round = await rounds.findOne({
-            playerId: playerId,
+            playerId: playerId.toString(),
             status: "in_progress",
         });
         return round;
