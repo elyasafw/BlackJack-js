@@ -9,6 +9,28 @@ const pages = {
 };
 
 pages.prosessGame.remove();
+pages.startDisplay.remove();
+
+function renderRoundToUI(round) {
+    main.append(pages.prosessGame);
+
+    const sumBet = document.getElementById("sumBet");
+    sumBet.textContent = round.bet;
+
+    const sumCards = document.getElementById("sumCards");
+    sumCards.textContent = calculateCards(round.playerCards);
+
+    document.getElementById("playerCards").innerHTML = "";
+    document.getElementById("dealerCards").innerHTML = "";
+
+    const dealerCardsToDisplay = [...round.dealerCards];
+    if (dealerCardsToDisplay.length === 1) {
+        dealerCardsToDisplay.push({ rank: "back" });
+    }
+
+    addCardsToTable(round.playerCards, "playerCards");
+    addCardsToTable(dealerCardsToDisplay, "dealerCards");
+}
 
 async function listenedToButtons(/**@type {Event} */ event) {
     event.preventDefault();
@@ -19,22 +41,15 @@ async function listenedToButtons(/**@type {Event} */ event) {
         case "sendBet": {
             const newRound = await startRound();
             if (!newRound) return;
-            main.append(pages.prosessGame);
-            const backCard = {
-                rank: "back",
-            };
-            const sumBet = document.getElementById("sumBet");
-            sumBet.textContent = newRound.bet;
-            newRound.dealerCards.push(backCard);
-            addCardsToTable(newRound.playerCards, "playerCards");
-            addCardsToTable(newRound.dealerCards, "dealerCards");
+
+            renderRoundToUI(newRound);
             break;
         }
     }
 }
 
 async function startGame() {
-    const respons = await fetch("/start-game", {
+    const respons = await fetch(API + "/start-game", {
         method: "POST",
     });
     const data = await respons.json();
@@ -45,6 +60,7 @@ async function startRound() {
     const input = document.querySelector("#inputBet");
     const bet = input.value;
     const playerId = localStorage.getItem(KEY);
+
     const respons = await fetch(API + "/start-round", {
         method: "POST",
         headers: {
@@ -53,17 +69,16 @@ async function startRound() {
         },
         body: JSON.stringify({ bet: bet }),
     });
+
     const round = await respons.json();
     if (round.error) {
         const errorMsg = document.getElementById("msg");
         errorMsg.textContent = round.error;
         const inputForm = document.getElementById("getBet");
         inputForm.append(errorMsg);
-        inputForm.reset();
         return;
     }
     round.bet = bet;
-    pages.startDisplay.remove();
     return round;
 }
 
@@ -90,9 +105,55 @@ function addCardsToTable(cards, participants) {
     });
 }
 
-main.addEventListener("click", listenedToButtons);
-if (!localStorage.getItem(KEY)) {
-    startGame();
-} else {
-    startRound();
+function calculateCards(cards) {
+    // prettier-ignore
+    const values = {
+        "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, 
+        "8": 8, "9": 9, "10": 10, "J": 10, "Q": 10, "K": 10, "A": 11
+    };
+    let acesCount = 0;
+    let total = cards.reduce((acc, cur) => {
+        const cardValue = values[cur.rank] || 0;
+        if (cur.rank === "A") acesCount++;
+        return acc + cardValue;
+    }, 0);
+    while (total > 21 && acesCount > 0) {
+        total -= 10;
+        acesCount--;
+    }
+    return total;
 }
+
+async function initGame() {
+    const playerId = localStorage.getItem(KEY);
+    if (!playerId) {
+        await startGame();
+        return;
+    }
+    try {
+        const response = await fetch(API + "/my-round", {
+            method: "GET",
+            headers: {
+                "x-player-id": playerId,
+            },
+        });
+        if (response.ok) {
+            const round = await response.json();
+            console.info("נתונים שהתקבלו מהשרת:", round);
+            if (round && round.round === null) {
+                return;
+            }
+            if (round && round.playerCards) {
+                renderRoundToUI(round);
+            }
+        } else {
+            localStorage.removeItem(KEY);
+            await startGame();
+        }
+    } catch (error) {
+        console.error("שגיאת מערכת בזמן טעינת המשחק:", error);
+    }
+}
+
+initGame();
+main.addEventListener("click", listenedToButtons);

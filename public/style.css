@@ -31,9 +31,15 @@ body {
     align-items: center;
 }
 
-#currentBet {
+#roundDetails {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+#currentBet,#cardsValue {
     border: 1px solid black;
-    padding: 8px;
+    padding-inline: 8px;
     width: 120px;
     text-align: center;
 }

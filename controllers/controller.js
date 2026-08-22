@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import playersRepo from "../repository/players.repo.js";
 import roundsRepo from "../repository/rounds.repo.js";
 import roundsService from "../services/rounds.service.js";
@@ -19,7 +20,7 @@ export async function createNewPlayer(_req, res) {
 export async function createNewRound(req, res) {
     const bet = Number(req.body.bet);
     const player = req.player;
-    const round = await roundsRepo.findRoundByPlayer(player._id);
+    const round = await roundsRepo.findRoundByPlayer(new ObjectId(player._id));
     validateNewRound({
         bet,
         player,
@@ -41,4 +42,14 @@ export async function createNewRound(req, res) {
         dealerCards: [newData.dealerCards[1]],
         chips: currentChips,
     };
+}
+
+export async function getRound(playerId) {
+    const round = await roundsRepo.findRoundByPlayer(playerId);
+    if (!round) {
+        return {
+            round: null,
+        };
+    }
+    return round;
 }
